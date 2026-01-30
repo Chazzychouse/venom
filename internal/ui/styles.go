@@ -26,6 +26,9 @@ var (
 	ErrorText = lipgloss.NewStyle().
 			Foreground(Error)
 
+	Spinner = lipgloss.NewStyle().
+		Foreground(Primary)
+
 	// Box for displaying metadata, results, etc.
 	Box = lipgloss.NewStyle().
 		Border(lipgloss.RoundedBorder()).

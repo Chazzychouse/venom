@@ -2,7 +2,10 @@ package cmd
 
 import (
 	"fmt"
+	fs "path/filepath"
+	"time"
 
+	tea "github.com/charmbracelet/bubbletea"
 	"github.com/chazzychouse/venom/internal/ui"
 	"github.com/spf13/cobra"
 )
@@ -26,11 +29,28 @@ func init() {
 	// metadataCmd.Flags().StringP("set-artist", "a", "", "set artist name")
 	// metadataCmd.Flags().BoolP("batch", "b", false, "batch process directory")
 }
+func doShit(p *tea.Program) {
+	time.Sleep(2 * time.Second)
+	p.Send(ui.SpinnerDone{})
+}
 
 func runMetadata(cmd *cobra.Command, args []string) error {
 	filePath := args[0]
-	fmt.Println(ui.Title.Render("Metadata"))
-	fmt.Println(ui.Subtle.Render("Reading metadata from: " + filePath))
+
+	s := ui.NewSpinner("Looking at your " + filePath + "...")
+	p := tea.NewProgram(s)
+
+	go func() {
+		doShit(p)
+	}()
+
+	p.Run()
+	var ext = fs.Ext(filePath)
+	switch ext {
+	case "mp3":
+		fmt.Println("mp3")
+	default:
+	}
 	// TODO: Implement metadata reading/writing
 	// 1. Detect file type (mp3, flac, wav, etc.)
 	// 2. Use appropriate library to read tags
